@@ -7,7 +7,7 @@
     "name": "Consumer Financial Protection Bureau",
     "url": "http://consumerfinance.gov"
   },
-  "repository": {s
+  "repository": {
     "type": "git",
     "url": "https://github.com/cfpb/cfpb-analytics"
   },
