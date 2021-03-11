@@ -44,10 +44,6 @@ node_modules/
 bower_components/
 src/vendor/
 
-# Grunt #
-#########
-.grunt/
-
 # Test reports #
 ################
 test/coverage

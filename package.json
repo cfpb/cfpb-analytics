@@ -1,5 +1,6 @@
 {
   "name": "cfpb-analytics",
+  "version": "0.0.1",
   "main": "index.js",
   "private": true,
   "description": "Analytics logic for consumerfinance.gov sites.",
