@@ -1,7 +1,7 @@
 {
   "name": "cfpb-analytics",
-  "version": "0.1.0",
   "main": "index.js",
+  "private": true,
   "description": "Analytics logic for consumerfinance.gov sites.",
   "homepage": "https://github.com/cfpb/cfpb-analytics",
   "bugs": "https://github.com/cfpb/cfpb-analytics/issues",
@@ -13,7 +13,7 @@
     "type": "git",
     "url": "https://github.com/cfpb/cfpb-analytics"
   },
-  "license": "Public Domain",
+  "license": "SEE LICENSE IN TERMS.md",
   "keywords": [
     "cfpb-analytics",
     "analytics",
@@ -21,12 +21,5 @@
   ],
   "workspaces": [
     "packages/*"
-  ],
-  "devDependencies": {
-    "jest": "^0.11.2",
-    "jest-cli": "^23.0.0-alpha.0"
-  },
-  "scripts": {
-    "test": "jest test/cfpb-analytics-tests.js"
-  }
+  ]
 }
