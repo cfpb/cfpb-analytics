@@ -1,15 +1,13 @@
 {
-  "name": "cfpb-analytics",
-  "version": "0.1.0",
-  "main": "index.js",
-  "description": "Analytics logic for consumerfinance.gov sites.",
+  "name": "@cfpb/browserslist-config",
+  "description": "Browserslist data for consumerfinance.gov.",
   "homepage": "https://github.com/cfpb/cfpb-analytics",
   "bugs": "https://github.com/cfpb/cfpb-analytics/issues",
   "author": {
     "name": "Consumer Financial Protection Bureau",
     "url": "http://consumerfinance.gov"
   },
-  "repository": {
+  "repository": {s
     "type": "git",
     "url": "https://github.com/cfpb/cfpb-analytics"
   },
@@ -18,15 +16,5 @@
     "cfpb-analytics",
     "analytics",
     "cfpb"
-  ],
-  "workspaces": [
-    "packages/*"
-  ],
-  "devDependencies": {
-    "jest": "^0.11.2",
-    "jest-cli": "^23.0.0-alpha.0"
-  },
-  "scripts": {
-    "test": "jest test/cfpb-analytics-tests.js"
-  }
+  ]
 }
