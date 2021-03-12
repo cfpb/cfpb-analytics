@@ -1,9 +1,8 @@
 {
   "name": "cfpb-analytics",
   "version": "0.0.1",
-  "main": "index.js",
   "private": true,
-  "description": "Analytics logic for consumerfinance.gov sites.",
+  "description": "Analytics support for consumerfinance.gov sites.",
   "homepage": "https://github.com/cfpb/cfpb-analytics",
   "bugs": "https://github.com/cfpb/cfpb-analytics/issues",
   "author": {

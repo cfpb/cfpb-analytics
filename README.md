@@ -1,44 +1,6 @@
-# cfpb-analytics [![Build Status](https://secure.travis-ci.org/cfpb/cfpb-analytics.png?branch=master)](http://travis-ci.org/cfpb/cfpb-analytics)
+> Analytics support for consumerfinance.gov sites.
 
-> Analytics logic for consumerfinance.gov sites.
-
-## Installation
-
-First install [node.js](http://nodejs.org/). Then:
-
-```sh
-npm install cfpb-analytics --save
-```
-
-```sh
-npm install cfpb-analytics --save
-var cfpb-analytics = require('cfpb-analytics');
-```
-
-## Usage
-
-```javascript
-var cfpb-analytics = require('cfpb-analytics');
-cfpb-analytics({ thing: 'foo', anotherThing: 'bar' });
-```
-
-## Contributing
-
-Please read the [Contributing guidelines](CONTRIBUTING.md).
-
-### Running Tests
-
-We are using [nodeunit](https://github.com/caolan/nodeunit) to test. To run tests, first install nodeunit and any dependencies via npm:
-
-```
-npm install
-```
-
-Run tests with:
-
-```
-npm test
-```
+This currently contains one scoped package, `@cfpb/browserslist-config`, contained in the `packages` directory, which contains stats for use in browserlist. See https://github.com/browserslist/browserslist#custom-usage-data.
 
 ## License
 
