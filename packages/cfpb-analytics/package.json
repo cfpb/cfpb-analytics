@@ -29,6 +29,7 @@
     "jest-environment-jsdom": "^29.3.0"
   },
   "scripts": {
-    "test": "jest"
-  }
+    "test": "yarn node --experimental-vm-modules $(yarn bin jest)"
+  },
+  "type": "module"
 }

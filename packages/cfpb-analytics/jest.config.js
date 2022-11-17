@@ -1,8 +1,8 @@
 const esModules = ['@cfpb/cfpb-atomic-component'].join('|');
-module.exports = {
+const config = {
   testEnvironment: 'jsdom',
-  transform: {
-    "^.+\\.(js|jsx)$": "babel-jest",
-  },
-  transformIgnorePatterns: [`<rootDir>/../../node_modules/(?!${esModules})`]
+  transform: {},
+  testPathIgnorePatterns: [`<rootDir>/../../node_modules/(?!${esModules})`]
 };
+
+export default config;
