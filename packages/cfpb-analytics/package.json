@@ -21,15 +21,5 @@
     "analytics",
     "cfpb"
   ],
-  "devDependencies": {
-    "@babel/preset-env": "^7.20.2",
-    "@cfpb/cfpb-atomic-component": "^0.17.9",
-    "babel-jest": "^29.3.0",
-    "jest": "^29.3.0",
-    "jest-environment-jsdom": "^29.3.0"
-  },
-  "scripts": {
-    "test": "yarn node --experimental-vm-modules $(yarn bin jest)"
-  },
   "type": "module"
 }
