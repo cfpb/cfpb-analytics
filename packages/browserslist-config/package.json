@@ -20,5 +20,6 @@
     "cfpb-analytics",
     "analytics",
     "cfpb"
-  ]
+  ],
+  "type": "module"
 }

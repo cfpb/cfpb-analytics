@@ -1,6 +1,6 @@
 {
   "name": "@cfpb/cfpb-analytics",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Data layer analytics utility.",
   "homepage": "https://github.com/cfpb/cfpb-analytics",
   "bugs": "https://github.com/cfpb/cfpb-analytics/issues",
@@ -11,6 +11,7 @@
   "publishConfig": {
     "access": "public"
   },
+  "main": "src/Analytics.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/cfpb/cfpb-analytics"
@@ -21,5 +22,8 @@
     "analytics",
     "cfpb"
   ],
+  "dependencies": {
+    "@cfpb/cfpb-atomic-component": "^0.21.9"
+  },
   "type": "module"
 }
