@@ -47,4 +47,5 @@ src/vendor/
 # Test reports #
 ################
 test/coverage
+coverage
 test/junit

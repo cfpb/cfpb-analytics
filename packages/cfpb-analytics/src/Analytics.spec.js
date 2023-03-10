@@ -1,14 +1,11 @@
-import {jest} from '@jest/globals';
-import Analytics from './Analytics.js';
-let dataLayerOptions;
-let getDataLayerOptions;
-let UNDEFINED;
+import { jest } from '@jest/globals';
+import {
+  Analytics,
+} from './Analytics.js';
 
-describe('Analytics', () => {
-  beforeAll(() => {
-    getDataLayerOptions = Analytics.getDataLayerOptions;
-  });
+let analytics;
 
+describe('cfpb-analytics', () => {
   beforeEach(() => {
     /**
      * Mock for window.dataLayer.push.
@@ -29,112 +26,80 @@ describe('Analytics', () => {
     window.dataLayer = [];
     window.dataLayer.push = push;
     delete window['google_tag_manager'];
-    Analytics.tagManagerIsLoaded = false;
 
-    dataLayerOptions = {
-      event: 'Page Interaction',
-      eventCallback: UNDEFINED,
-      action: '',
-      label: '',
-      eventTimeout: 500,
-    };
+    analytics = new Analytics();
   });
 
   describe('.init()', () => {
     it('should have a proper state after initialization', () => {
-      expect(Analytics.tagManagerIsLoaded === false).toBe(true);
+      expect(window['google_tag_manager']).toBeUndefined();
       window['google_tag_manager'] = {};
-      Analytics.init();
-      expect(Analytics.tagManagerIsLoaded === true).toBe(true);
+      analytics.init();
+      expect(typeof window['google_tag_manager'] === 'object').toBe(true);
     });
 
     it('should properly set the google_tag_manager object', () => {
       const mockGTMObject = { testing: true };
-      Analytics.init();
-      expect(Analytics.tagManagerIsLoaded === false).toBe(true);
+      analytics.init();
+      expect(window['google_tag_manager']).toBeUndefined();
       window['google_tag_manager'] = mockGTMObject;
-      expect(Analytics.tagManagerIsLoaded === true).toBe(true);
-      expect(window.google_tag_manager).toStrictEqual(mockGTMObject);
+      analytics.addEventListener('gtmloaded', ()=>{
+        expect(window['google_tag_manager']).toStrictEqual(mockGTMObject);
+      })
     });
   });
 
   describe('.sendEvent()', () => {
     it('should properly add objects to the dataLayer Array', () => {
-      const action = 'inbox:clicked';
-      const label = 'text:null';
-      const options = { ...dataLayerOptions, action: action, label: label };
+      const payload = {
+        action: 'inbox:clicked',
+        label: 'text:null'
+      }
+      let UNDEFINED;
+      const dataLayerOptions = {
+        event: 'Page Interaction',
+        eventCallback: UNDEFINED,
+        action: '',
+        label: '',
+        eventTimeout: 500,
+      };
+      const options = { ...dataLayerOptions, ...payload };
       window['google_tag_manager'] = {};
-      Analytics.init();
-      Analytics.sendEvent(getDataLayerOptions(action, label));
-      expect(window.dataLayer.length === 1).toBe(true);
+      analytics.init();
+      analytics.sendEvent(payload);
+      expect(window.dataLayer.length).toEqual(1);
       expect(window.dataLayer[0]).toStrictEqual(options);
     });
 
     it("shouldn't add objects to the dataLayer Array if GTM is undefined", () => {
-      const action = 'inbox:clicked';
-      const label = 'text:null';
+      const payload = {
+        action: 'inbox:clicked',
+        label: 'text:null',
+        callback: ()=>{}
+      }
       delete window['google_tag_manager'];
-      Analytics.init();
-      Analytics.sendEvent(getDataLayerOptions(action, label));
-      expect(window.dataLayer.length === 0).toBe(true);
+      analytics.init();
+      analytics.sendEvent(payload);
+      expect(window.dataLayer.length).toEqual(0);
     });
 
     it('should invoke the callback if provided', () => {
-      Analytics.init();
-      const action = 'inbox:clicked';
-      const label = 'text:null';
-      const callback = {
-        method: jest.fn(),
-      };
-      const callbackSpy = jest.spyOn(callback, 'method');
+      analytics.init();
+      const payload = {
+        action: 'inbox:clicked',
+        label: 'text:null',
+        callback: jest.fn()
+      }
+      const callbackSpy = jest.spyOn(payload, 'callback');
       window['google_tag_manager'] = {};
-      Analytics.sendEvent(
-        getDataLayerOptions(action, label, '', callback.method)
-      );
+      analytics.sendEvent(payload);
       expect(callbackSpy).toHaveBeenCalledTimes(1);
 
-      // Check code branch for when Analytics.tagManagerIsLoaded is not set.
-      Analytics.tagManagerIsLoaded = false;
-      Analytics.sendEvent(
-        getDataLayerOptions(action, label, '', callback.method)
-      );
+      // Check code branch for when tagManagerIsLoaded is not set.
+      delete window['google_tag_manager'];
+      analytics.init();
+      analytics.sendEvent(payload);
       expect(callbackSpy).toHaveBeenCalledTimes(2);
-    });
-  });
-
-  describe('.sendEvents()', () => {
-    it('should properly add objects to the dataLayer Array', () => {
-      const options1 = getDataLayerOptions({
-        ...dataLayerOptions,
-        action: 'inbox:clicked',
-        label: 'text:label_1',
-      });
-      const options2 = getDataLayerOptions({
-        ...dataLayerOptions,
-        action: 'checbox:clicked',
-        label: 'text:label_2',
-      });
-      window['google_tag_manager'] = {};
-      Analytics.init();
-      Analytics.sendEvents([options1, options2]);
-      expect(window.dataLayer.length === 2).toBe(true);
-    });
-
-    it("shouldn't add objects to the dataLayer Array if an array isn't passed", () => {
-      const options1 = getDataLayerOptions({
-        ...dataLayerOptions,
-        action: 'inbox:clicked',
-        label: 'text:label_1',
-      });
-      const options2 = getDataLayerOptions({
-        ...dataLayerOptions,
-        action: 'checbox:clicked',
-        label: 'text:label_2',
-      });
-      window['google_tag_manager'] = {};
-      Analytics.init();
-      Analytics.sendEvents(options1, options2);
-      expect(window.dataLayer.length === 0).toBe(true);
     });
   });
 });

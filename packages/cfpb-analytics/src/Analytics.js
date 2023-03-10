@@ -1,42 +1,16 @@
-import EventObserver from '@cfpb/cfpb-atomic-component/src/mixins/EventObserver.js';
-import {isArray} from '@cfpb/cfpb-atomic-component/src/utilities/type-checkers';
+import { EventObserver } from '@cfpb/cfpb-atomic-component';
 
-const eventObserver = new EventObserver();
-const Analytics = {
-  tagManagerIsLoaded: false,
-  addEventListener: eventObserver.addEventListener,
-  removeEventListener: eventObserver.removeEventListener,
-  dispatchEvent: eventObserver.dispatchEvent,
-
-  EVENT_CATEGORY: 'Page Interaction',
-
-  /**
-   * Get data layer object.
-   *
-   * @param {string} action - Name of event.
-   * @param {string} label - DOM element label.
-   * @param {string} category - Type of event.
-   * @param {Function} [callback=undefined] - Function to call on GTM submission.
-   * @param {number} [timeout=500] - Callback invocation fallback time.
-   * @returns {object} Data layer object.
-   */
-  getDataLayerOptions: function (action, label, category, callback, timeout) {
-    return {
-      event: category || Analytics.EVENT_CATEGORY,
-      action: action,
-      label: label || '',
-      eventCallback: callback,
-      eventTimeout: timeout || 500,
-    };
-  },
+function Analytics() {
+  let isGoogleTagManagerLoaded = false;
+  let that = this;
 
   /**
    * Initialize the Analytics module.
    */
-  init: function () {
-    // detect if Google tag manager is loaded
+  function init() {
+    // Detect if Google tag manager is loaded.
     if ({}.hasOwnProperty.call(window, 'google_tag_manager')) {
-      Analytics.tagManagerIsLoaded = true;
+      isGoogleTagManagerLoaded = true;
     } else {
       let _tagManager;
       Object.defineProperty(window, 'google_tag_manager', {
@@ -47,48 +21,52 @@ const Analytics = {
         },
         set: function (value) {
           _tagManager = value;
-          if (!Analytics.tagManagerIsLoaded) {
-            Analytics.tagManagerIsLoaded = true;
-            Analytics.dispatchEvent('gtmLoaded');
+          if (!isGoogleTagManagerLoaded) {
+            isGoogleTagManagerLoaded = true;
+            that.dispatchEvent('gtmloaded');
           }
         },
       });
     }
-  },
+  }
 
   /**
    * @name sendEvent
    * @kind function
    * @description
-   * Pushes an event to the GTM dataLayer.
-   * @param {object} dataLayerOptions - Type of event.
+   *   Pushes an event to the GTM dataLayer.
+   * @param {object} payload - A list or a single event.
+   * @param {string} payload.category - Type of event.
+   * @param {string} payload.action - Name of event.
+   * @param {string} payload.label - DOM element label.
+   * @param {Function} [payload.callback] - Function to call on GTM submission.
+   * @param {number} [payload.timeout] - Callback invocation fallback time.
    */
-  sendEvent: function (dataLayerOptions) {
-    const callback = dataLayerOptions.eventCallback;
-    if (Analytics.tagManagerIsLoaded) {
-      window.dataLayer.push(dataLayerOptions);
-    } else if (callback && typeof callback === 'function') {
+  function sendEvent(payload) {
+    if (isGoogleTagManagerLoaded) {
+      window.dataLayer.push({
+        event: payload.category || 'Page Interaction',
+        action: payload.action,
+        label: payload.label || '',
+        eventCallback: payload.callback,
+        eventTimeout: payload.timeout || 500,
+      });
+    } else if (payload.callback && typeof payload.callback === 'function') {
       // eslint-disable-next-line callback-return
-      callback();
+      payload.callback();
     }
-  },
+  }
 
-  /**
-   * @name sendEvents
-   * @kind function
-   * @description
-   * Pushes multiple events to the GTM dataLayer.
-   * @param {Array} eventsArray - Array of event objects.
-   */
-  sendEvents: function (eventsArray) {
-    if (isArray(eventsArray)) {
-      for (let i = 0, len = eventsArray.length; i < len; i++) {
-        Analytics.sendEvent(eventsArray[i]);
-      }
-    }
-  },
-};
+  // Attach public events.
+  const eventObserver = new EventObserver();
+  this.addEventListener = eventObserver.addEventListener;
+  this.removeEventListener = eventObserver.removeEventListener;
+  this.dispatchEvent = eventObserver.dispatchEvent;
 
-Analytics.init();
+  this.init = init;
+  this.sendEvent = sendEvent;
 
-export default Analytics;
+  return this;
+}
+
+export { Analytics };
