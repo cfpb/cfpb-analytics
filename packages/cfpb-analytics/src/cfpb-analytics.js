@@ -46,7 +46,7 @@ function ensureGoogleTagManagerLoaded() {
  * @description
  *   Pushes an event to the GTM dataLayer.
  * @param {object} payload - A list or a single event.
- * @param {string} payload.category - Type of event.
+ * @param {string} payload.event - Type of event.
  * @param {string} payload.action - Name of event.
  * @param {string} payload.label - DOM element label.
  * @param {Function} [payload.callback] - Function to call on GTM submission.
@@ -57,12 +57,12 @@ function ensureGoogleTagManagerLoaded() {
 function analyticsSendEvent(payload) {
   return ensureGoogleTagManagerLoaded().then(() => {
     analyticsLog(
-      `Pushing event "${payload.category}",
+      `Pushing event "${payload.event}",
        with action "${payload.action}" and label "${payload.label}".`
     );
     // isGoogleTagManagerLoaded should equal true at this point.
     window.dataLayer.push({
-      event: payload.category || 'Page Interaction',
+      event: payload.event || 'Page Interaction',
       action: payload.action,
       label: payload.label || '',
       eventCallback: payload.callback,
