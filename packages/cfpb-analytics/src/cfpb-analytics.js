@@ -32,9 +32,9 @@ function _init() {
 function ensureGoogleTagManagerLoaded() {
   return new Promise(function (resolve, reject) {
     (function waitForGoogleTagManager(){
-      _init();
       if (++loadTryCount > 9) return reject();
       if (isGoogleTagManagerLoaded) return resolve();
+      _init();
       setTimeout(waitForGoogleTagManager, 500);
     })();
   });
@@ -49,8 +49,8 @@ function ensureGoogleTagManagerLoaded() {
  * @param {string} payload.event - Type of event.
  * @param {string} payload.action - Name of event.
  * @param {string} payload.label - DOM element label.
- * @param {Function} [payload.callback] - Function to call on GTM submission.
- * @param {number} [payload.timeout] - Callback invocation fallback time.
+ * @param {Function} [payload.eventCallback] - Function to call on GTM submission.
+ * @param {number} [payload.eventTimeout] - Callback invocation fallback time.
  * @returns {Promise} Resolves if the event is sent,
  *   otherwise calls the callback if provided.
  */
@@ -65,13 +65,13 @@ function analyticsSendEvent(payload) {
       event: payload.event || 'Page Interaction',
       action: payload.action,
       label: payload.label || '',
-      eventCallback: payload.callback,
-      eventTimeout: payload.timeout || 500,
+      eventCallback: payload.eventCallback,
+      eventTimeout: payload.eventTimeout || 500,
     });
   }).catch(()=> {
-    if (payload.callback && typeof payload.callback === 'function') {
+    if (payload.eventCallback && typeof payload.eventCallback === 'function') {
       // eslint-disable-next-line callback-return
-      payload.callback();
+      payload.eventCallback();
     }
   });
 }
@@ -91,5 +91,15 @@ function analyticsLog(...msg) {
     }
   }
 }
+
+/**
+ * Try to proactively initialize analytics when custom gtmloaded event fires.
+ */
+window.addEventListener('gtmloaded', function() {
+  ensureGoogleTagManagerLoaded().catch(()=> {
+    loadTryCount = 0;
+  });
+}, { once: true });
+
 
 export { analyticsSendEvent, analyticsLog };
