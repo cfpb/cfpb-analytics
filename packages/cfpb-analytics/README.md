@@ -7,7 +7,7 @@ import {
   analyticsSendEvent
 } from '@cfpb/cfpb-analytics';
 analyticsSendEvent({
-  category: 'test category',
+  event: 'test event',
   action: 'test action',
   label: 'test label'
 })
