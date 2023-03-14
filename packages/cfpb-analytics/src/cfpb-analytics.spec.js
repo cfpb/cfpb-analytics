@@ -30,7 +30,7 @@ describe('cfpb-analytics', () => {
   });
 
   describe('.analyticsSendEvent()', () => {
-    it('should properly add objects to the dataLayer array', () => {
+    it('should properly add objects to the dataLayer array', async () => {
       let UNDEFINED;
       const payload = {
         event: 'Page Interaction',
@@ -40,44 +40,41 @@ describe('cfpb-analytics', () => {
         eventTimeout: 500,
       }
       window['google_tag_manager'] = {};
-      analyticsSendEvent(payload).then(() => {
-        expect(window.dataLayer.length).toEqual(1);
-        expect(window.dataLayer[0]).toStrictEqual(payload);
-      });
+      await analyticsSendEvent(payload);
+      expect(window.dataLayer.length).toEqual(1);
+      expect(window.dataLayer[0]).toStrictEqual(payload);
     });
 
-    it("shouldn't add objects to the dataLayer array if GTM is undefined", () => {
+    it("shouldn't add objects to the dataLayer array if GTM is undefined", async () => {
       const payload = {
         action: 'inbox:clicked',
         label: 'text:null',
-        callback: ()=>{}
+        eventCallback: ()=>{}
       }
       delete window['google_tag_manager'];
-      analyticsSendEvent(payload).then(()=>{
-        expect(window.dataLayer.length).toEqual(0);
-      });
+      await analyticsSendEvent(payload);
+      expect(window.dataLayer.length).toEqual(0);
     });
 
-    it('should invoke the callback when GTM is loaded', () => {
+    it('should invoke the callback when GTM is loaded', async () => {
       const payload = {
         action: 'inbox:clicked',
         label: 'text:null',
-        callback: jest.fn()
+        eventCallback: jest.fn()
       }
-      const callbackSpy = jest.spyOn(payload, 'callback');
+      const callbackSpy = jest.spyOn(payload, 'eventCallback');
       window['google_tag_manager'] = {};
-      analyticsSendEvent(payload).then(() => {
-        expect(callbackSpy).toHaveBeenCalledTimes(1);
-      });
+      await analyticsSendEvent(payload);
+      expect(callbackSpy).toHaveBeenCalledTimes(1);
     });
 
     it('should invoke the callback when GTM is not loaded', async () => {
       const payload = {
         action: 'inbox:clicked',
         label: 'text:null',
-        callback: jest.fn()
+        eventCallback: jest.fn()
       }
-      const callbackSpy = jest.spyOn(payload, 'callback');
+      const callbackSpy = jest.spyOn(payload, 'eventCallback');
       delete window['google_tag_manager'];
       await analyticsSendEvent(payload);
       expect(callbackSpy).toHaveBeenCalledTimes(1);
@@ -87,9 +84,9 @@ describe('cfpb-analytics', () => {
       const payload = {
         action: 'inbox:clicked',
         label: 'text:null',
-        callback: jest.fn()
+        eventCallback: jest.fn()
       }
-      const callbackSpy = jest.spyOn(payload, 'callback');
+      const callbackSpy = jest.spyOn(payload, 'eventCallback');
       delete window['google_tag_manager'];
       analyticsSendEvent(payload);
       window['google_tag_manager'] = {};
