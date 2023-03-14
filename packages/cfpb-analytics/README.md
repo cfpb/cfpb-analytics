@@ -1,6 +1,6 @@
 # Analytics support for consumerfinance.gov sites.
 
-To use the analytics utilities, import the module, create an instance, initialize it, and send events:
+To use the analytics utility, import the `analyticsSendEvent` method and send events:
 
 ```js
 import {
