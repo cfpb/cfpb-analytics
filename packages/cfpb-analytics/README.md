@@ -4,11 +4,9 @@ To use the analytics utilities, import the module, create an instance, initializ
 
 ```js
 import {
-  Analytics
+  analyticsSendEvent
 } from '@cfpb/cfpb-analytics';
-const analytics = new Analytics();
-analytics.init()
-analytics.sendEvent({
+analyticsSendEvent({
   category: 'test category',
   action: 'test action',
   label: 'test label'
