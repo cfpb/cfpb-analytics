@@ -23,7 +23,7 @@ describe('cfpb-analytics', () => {
     window.dataLayer.push = push;
     delete window['google_tag_manager'];
 
-    return import('./cfpb-analytics.js').then(module => {
+    return import('./cfpb-analytics.js').then((module) => {
       analyticsSendEvent = module.analyticsSendEvent;
       jest.resetModules();
     });
@@ -38,7 +38,7 @@ describe('cfpb-analytics', () => {
         label: 'text:null',
         eventCallback: UNDEFINED,
         eventTimeout: 500,
-      }
+      };
       window['google_tag_manager'] = {};
       await analyticsSendEvent(payload);
       expect(window.dataLayer.length).toEqual(1);
@@ -49,8 +49,8 @@ describe('cfpb-analytics', () => {
       const payload = {
         action: 'inbox:clicked',
         label: 'text:null',
-        eventCallback: ()=>{}
-      }
+        eventCallback: () => {},
+      };
       delete window['google_tag_manager'];
       await analyticsSendEvent(payload);
       expect(window.dataLayer.length).toEqual(0);
@@ -60,8 +60,8 @@ describe('cfpb-analytics', () => {
       const payload = {
         action: 'inbox:clicked',
         label: 'text:null',
-        eventCallback: jest.fn()
-      }
+        eventCallback: jest.fn(),
+      };
       const callbackSpy = jest.spyOn(payload, 'eventCallback');
       window['google_tag_manager'] = {};
       await analyticsSendEvent(payload);
@@ -72,8 +72,8 @@ describe('cfpb-analytics', () => {
       const payload = {
         action: 'inbox:clicked',
         label: 'text:null',
-        eventCallback: jest.fn()
-      }
+        eventCallback: jest.fn(),
+      };
       const callbackSpy = jest.spyOn(payload, 'eventCallback');
       delete window['google_tag_manager'];
       await analyticsSendEvent(payload);
@@ -84,8 +84,8 @@ describe('cfpb-analytics', () => {
       const payload = {
         action: 'inbox:clicked',
         label: 'text:null',
-        eventCallback: jest.fn()
-      }
+        eventCallback: jest.fn(),
+      };
       const callbackSpy = jest.spyOn(payload, 'eventCallback');
       delete window['google_tag_manager'];
       analyticsSendEvent(payload);

@@ -24,12 +24,17 @@
   ],
   "devDependencies": {
     "@cfpb/cfpb-atomic-component": "^0.21.9",
+    "eslint": "^8.36.0",
+    "eslint-config-prettier": "^8.7.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsdoc": "^40.0.3",
     "jest": "^29.5.0",
-    "jest-environment-jsdom": "^29.5.0"
+    "jest-environment-jsdom": "^29.5.0",
+    "prettier": "^2.8.4"
   },
   "scripts": {
     "jest": "yarn node --experimental-vm-modules $(yarn bin jest packages/**/*.spec.js)",
-    "lint": "npx prettier packages/**/*.js -w"
+    "lint": "scripts/lint.sh"
   },
   "type": "module"
 }

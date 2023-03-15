@@ -1,3 +1,20 @@
+/**
+ * Log a message to the console if the `debug-gtm` URL parameter is set.
+ *
+ * @param {string} msg - Message to load to the console.
+ */
+function analyticsLog(...msg) {
+  // Check if URLSearchParams is supported (Chrome > 48; Edge > 16).
+  if (typeof window.URLSearchParams === 'function') {
+    // Get query params.
+    const queryParams = new URLSearchParams(window.location.search);
+    if (queryParams.get('debug-gtm') === 'true') {
+      // eslint-disable-next-line no-console
+      console.log(`ANALYTICS DEBUG MODE: ${msg}`);
+    }
+  }
+}
+
 let isGoogleTagManagerLoaded = false;
 let loadTryCount = 0;
 /**
@@ -5,10 +22,13 @@ let loadTryCount = 0;
  */
 function _init() {
   // Detect if Google tag manager is loaded.
-  const hasGoogleTagManager = {}.hasOwnProperty.call(window, 'google_tag_manager');
+  const hasGoogleTagManager = {}.hasOwnProperty.call(
+    window,
+    'google_tag_manager'
+  );
   if (hasGoogleTagManager && typeof window.google_tag_manager !== 'undefined') {
     isGoogleTagManagerLoaded = true;
-  } else if ( !hasGoogleTagManager ) {
+  } else if (!hasGoogleTagManager) {
     let tagManager;
     Object.defineProperty(window, 'google_tag_manager', {
       enumerable: true,
@@ -26,12 +46,13 @@ function _init() {
 
 /**
  * Poll every 0.5 seconds for 10 seconds for if Google Tag Manager has loaded.
+ *
  * @returns {Promise} Resolves if Google Tag Manager has loaded.
  *   Rejects if polling has completed.
  */
 function ensureGoogleTagManagerLoaded() {
   return new Promise(function (resolve, reject) {
-    (function waitForGoogleTagManager(){
+    (function waitForGoogleTagManager() {
       if (++loadTryCount > 9) return reject();
       if (isGoogleTagManagerLoaded) return resolve();
       _init();
@@ -55,51 +76,43 @@ function ensureGoogleTagManagerLoaded() {
  *   otherwise calls the callback if provided.
  */
 function analyticsSendEvent(payload) {
-  return ensureGoogleTagManagerLoaded().then(() => {
-    analyticsLog(
-      `Pushing event "${payload.event}",
+  return ensureGoogleTagManagerLoaded()
+    .then(() => {
+      analyticsLog(
+        `Pushing event "${payload.event}",
        with action "${payload.action}" and label "${payload.label}".`
-    );
-    // isGoogleTagManagerLoaded should equal true at this point.
-    window.dataLayer.push({
-      event: payload.event || 'Page Interaction',
-      action: payload.action,
-      label: payload.label || '',
-      eventCallback: payload.eventCallback,
-      eventTimeout: payload.eventTimeout || 500,
+      );
+      // isGoogleTagManagerLoaded should equal true at this point.
+      window.dataLayer.push({
+        event: payload.event || 'Page Interaction',
+        action: payload.action,
+        label: payload.label || '',
+        eventCallback: payload.eventCallback,
+        eventTimeout: payload.eventTimeout || 500,
+      });
+    })
+    .catch(() => {
+      if (
+        payload.eventCallback &&
+        typeof payload.eventCallback === 'function'
+      ) {
+        // eslint-disable-next-line callback-return
+        payload.eventCallback();
+      }
     });
-  }).catch(()=> {
-    if (payload.eventCallback && typeof payload.eventCallback === 'function') {
-      // eslint-disable-next-line callback-return
-      payload.eventCallback();
-    }
-  });
-}
-
-/**
- * Log a message to the console if the `debug-gtm` URL parameter is set.
- *
- * @param {string} msg - Message to load to the console.
- */
-function analyticsLog(...msg) {
-  // Check if URLSearchParams is supported (Chrome > 48; Edge > 16).
-  if (typeof window.URLSearchParams === 'function') {
-    // Get query params.
-    const queryParams = new URLSearchParams(window.location.search);
-    if (queryParams.get('debug-gtm') === 'true') {
-      console.log(`ANALYTICS DEBUG MODE: ${msg}`);
-    }
-  }
 }
 
 /**
  * Try to proactively initialize analytics when custom gtmloaded event fires.
  */
-window.addEventListener('gtmloaded', function() {
-  ensureGoogleTagManagerLoaded().catch(()=> {
-    loadTryCount = 0;
-  });
-}, { once: true });
-
+window.addEventListener(
+  'gtmloaded',
+  function () {
+    ensureGoogleTagManagerLoaded().catch(() => {
+      loadTryCount = 0;
+    });
+  },
+  { once: true }
+);
 
 export { analyticsSendEvent, analyticsLog };
