@@ -3,7 +3,7 @@ const config = {
   testEnvironment: 'jsdom',
   collectCoverage: true,
   transform: {},
-  testPathIgnorePatterns: [`<rootDir>/../../node_modules/(?!${esModules})`]
+  testPathIgnorePatterns: [`<rootDir>/../../node_modules/(?!${esModules})`],
 };
 
 export default config;

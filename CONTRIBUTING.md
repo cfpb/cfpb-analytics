@@ -5,7 +5,7 @@ Ready to publish changes to npm?
 1. Run `npm whoami` to see that you're logged into npm (run `npm login` if needed).
 2. `cd` into the package you want to publish inside `/packages/`.
 3. Increment the version number in the package's `package.json`.
-3. Run `npm publish`.
+4. Run `npm publish`.
 
 # Guidance on how to contribute
 
@@ -14,11 +14,10 @@ Ready to publish changes to npm?
 > feature request, you are agreeing to comply with this waiver of copyright interest.
 > Details can be found in our [TERMS](TERMS.md) and [LICENCE](LICENSE).
 
-
 There are two primary ways to help:
- - Using the issue tracker, and
- - Changing the code-base.
 
+- Using the issue tracker, and
+- Changing the code-base.
 
 ## Using the issue tracker
 
@@ -29,7 +28,6 @@ as others who are interested in this solution.
 Use the issue tracker to find ways to contribute. Find a bug or a feature, mention in
 the issue that you will take on that effort, then follow the _Changing the code-base_
 guidance below.
-
 
 ## Changing the code-base
 

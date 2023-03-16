@@ -2,9 +2,9 @@
 
 This contains the following scoped packages in the `packages` directory:
 
- - `@cfpb/browserslist-config` - contains stats for use in browserlist. See https://github.com/browserslist/browserslist#custom-usage-data.
+- `@cfpb/browserslist-config` - contains stats for use in browserlist. See https://github.com/browserslist/browserslist#custom-usage-data.
 
- - `@cfpb/cfpb-analytics` - contains a data layer utility for interacting with Google Analytics.
+- `@cfpb/cfpb-analytics` - contains a data layer utility for interacting with Google Analytics.
 
 ## License
 
