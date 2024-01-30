@@ -24,7 +24,7 @@ function _init() {
   // Detect if Google tag manager is loaded.
   const hasGoogleTagManager = {}.hasOwnProperty.call(
     window,
-    'google_tag_manager'
+    'google_tag_manager',
   );
   if (hasGoogleTagManager && typeof window.google_tag_manager !== 'undefined') {
     isGoogleTagManagerLoaded = true;
@@ -66,6 +66,9 @@ function ensureGoogleTagManagerLoaded() {
  * @kind function
  * @description
  *   Pushes an event to the GTM dataLayer.
+ *   This can accept arbitrary values, but traditionally (pre-GA4) would accept
+ *   event, action, and label. Th eventCallback and eventTimeout values can also
+ *   be sent, which are called if there's an issue loading GTM.
  * @param {object} payload - A list or a single event.
  * @param {string} payload.event - Type of event.
  * @param {string} payload.action - Name of event.
@@ -78,18 +81,14 @@ function ensureGoogleTagManagerLoaded() {
 function analyticsSendEvent(payload) {
   return ensureGoogleTagManagerLoaded()
     .then(() => {
-      analyticsLog(
-        `Pushing event "${payload.event}",
-       with action "${payload.action}" and label "${payload.label}".`
-      );
       // isGoogleTagManagerLoaded should equal true at this point.
-      window.dataLayer.push({
-        event: payload.event || 'Page Interaction',
-        action: payload.action,
-        label: payload.label || '',
-        eventCallback: payload.eventCallback,
-        eventTimeout: payload.eventTimeout || 500,
+      const printPayload = [];
+      Object.entries(payload).forEach(([key, value]) => {
+        printPayload.push(`(${key}: ${value})`);
       });
+
+      analyticsLog(`Sending "${printPayload.join(', ')}"`);
+      window.dataLayer.push(payload);
     })
     .catch(() => {
       if (
@@ -112,7 +111,7 @@ window.addEventListener(
       loadTryCount = 0;
     });
   },
-  { once: true }
+  { once: true },
 );
 
 export { analyticsSendEvent, analyticsLog };
