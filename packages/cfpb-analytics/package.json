@@ -1,6 +1,6 @@
 {
   "name": "@cfpb/cfpb-analytics",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Data layer analytics utility.",
   "homepage": "https://github.com/cfpb/cfpb-analytics",
   "bugs": "https://github.com/cfpb/cfpb-analytics/issues",
