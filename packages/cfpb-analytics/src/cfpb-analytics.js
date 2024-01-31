@@ -17,37 +17,22 @@ function analyticsLog(...msg) {
 
 let loadTryCount = 0;
 
-function _initDone() {
-  window.cfpbGTM = true;
+function _isGtmLoaded() {
   window.dataLayer = window.dataLayer || [];
-}
-
-/**
- * Initialize the Analytics module.
- */
-function _init() {
-  // Detect if Google tag manager is loaded.
-  const hasGoogleTagManager = {}.hasOwnProperty.call(
-    window,
-    'google_tag_manager'
+  let gtmStartedEvent = window.dataLayer.find(
+    (element) => element['gtm.start']
   );
 
-  if (hasGoogleTagManager && typeof window.google_tag_manager !== 'undefined') {
-    _initDone();
-  } else if (!hasGoogleTagManager) {
-    let tagManager;
-    Object.defineProperty(window, 'google_tag_manager', {
-      enumerable: true,
-      configurable: true,
-      get: function () {
-        return tagManager;
-      },
-      set: function (value) {
-        tagManager = value;
-        _initDone();
-      },
-    });
+  if (!gtmStartedEvent) {
+    // Not even the GTM inline config has executed.
+    return false;
+  } else if (!gtmStartedEvent['gtm.uniqueEventId']) {
+    // GTM inline config has run, but the main GTM JS has not loaded.
+    return false;
   }
+
+  // GTM is fully loaded and working.
+  return true;
 }
 
 /**
@@ -60,8 +45,7 @@ function ensureGoogleTagManagerLoaded() {
   return new Promise(function (resolve, reject) {
     (function waitForGoogleTagManager() {
       if (++loadTryCount > 9) return reject();
-      if (window.cfpbGTM) return resolve();
-      _init();
+      if (_isGtmLoaded()) return resolve();
       setTimeout(waitForGoogleTagManager, 500);
     })();
   });
@@ -87,7 +71,7 @@ function ensureGoogleTagManagerLoaded() {
 function analyticsSendEvent(payload) {
   return ensureGoogleTagManagerLoaded()
     .then(() => {
-      // isGoogleTagManagerLoaded should equal true at this point.
+      // GTM should be loaded at this point.
       const printPayload = [];
       Object.entries(payload).forEach(([key, value]) => {
         printPayload.push(`(${key}: ${value})`);
