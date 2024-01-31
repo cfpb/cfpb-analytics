@@ -15,33 +15,24 @@ function analyticsLog(...msg) {
   }
 }
 
-let isGoogleTagManagerLoaded = false;
 let loadTryCount = 0;
-/**
- * Initialize the Analytics module.
- */
-function _init() {
-  // Detect if Google tag manager is loaded.
-  const hasGoogleTagManager = {}.hasOwnProperty.call(
-    window,
-    'google_tag_manager',
+
+function _isGtmLoaded() {
+  window.dataLayer = window.dataLayer || [];
+  let gtmStartedEvent = window.dataLayer.find(
+    (element) => element['gtm.start']
   );
-  if (hasGoogleTagManager && typeof window.google_tag_manager !== 'undefined') {
-    isGoogleTagManagerLoaded = true;
-  } else if (!hasGoogleTagManager) {
-    let tagManager;
-    Object.defineProperty(window, 'google_tag_manager', {
-      enumerable: true,
-      configurable: true,
-      get: function () {
-        return tagManager;
-      },
-      set: function (value) {
-        tagManager = value;
-        isGoogleTagManagerLoaded = true;
-      },
-    });
+
+  if (!gtmStartedEvent) {
+    // Not even the GTM inline config has executed.
+    return false;
+  } else if (!gtmStartedEvent['gtm.uniqueEventId']) {
+    // GTM inline config has run, but the main GTM JS has not loaded.
+    return false;
   }
+
+  // GTM is fully loaded and working.
+  return true;
 }
 
 /**
@@ -54,8 +45,7 @@ function ensureGoogleTagManagerLoaded() {
   return new Promise(function (resolve, reject) {
     (function waitForGoogleTagManager() {
       if (++loadTryCount > 9) return reject();
-      if (isGoogleTagManagerLoaded) return resolve();
-      _init();
+      if (_isGtmLoaded()) return resolve();
       setTimeout(waitForGoogleTagManager, 500);
     })();
   });
@@ -81,7 +71,7 @@ function ensureGoogleTagManagerLoaded() {
 function analyticsSendEvent(payload) {
   return ensureGoogleTagManagerLoaded()
     .then(() => {
-      // isGoogleTagManagerLoaded should equal true at this point.
+      // GTM should be loaded at this point.
       const printPayload = [];
       Object.entries(payload).forEach(([key, value]) => {
         printPayload.push(`(${key}: ${value})`);
@@ -100,18 +90,5 @@ function analyticsSendEvent(payload) {
       }
     });
 }
-
-/**
- * Try to proactively initialize analytics when custom gtmloaded event fires.
- */
-window.addEventListener(
-  'gtmloaded',
-  function () {
-    ensureGoogleTagManagerLoaded().catch(() => {
-      loadTryCount = 0;
-    });
-  },
-  { once: true },
-);
 
 export { analyticsSendEvent, analyticsLog };
