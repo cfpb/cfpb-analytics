@@ -15,8 +15,13 @@ function analyticsLog(...msg) {
   }
 }
 
-let isGoogleTagManagerLoaded = false;
 let loadTryCount = 0;
+
+function _initDone() {
+  window.cfpbGTM = true;
+  window.dataLayer = window.dataLayer || [];
+}
+
 /**
  * Initialize the Analytics module.
  */
@@ -24,10 +29,11 @@ function _init() {
   // Detect if Google tag manager is loaded.
   const hasGoogleTagManager = {}.hasOwnProperty.call(
     window,
-    'google_tag_manager',
+    'google_tag_manager'
   );
+
   if (hasGoogleTagManager && typeof window.google_tag_manager !== 'undefined') {
-    isGoogleTagManagerLoaded = true;
+    _initDone();
   } else if (!hasGoogleTagManager) {
     let tagManager;
     Object.defineProperty(window, 'google_tag_manager', {
@@ -38,7 +44,7 @@ function _init() {
       },
       set: function (value) {
         tagManager = value;
-        isGoogleTagManagerLoaded = true;
+        _initDone();
       },
     });
   }
@@ -54,7 +60,7 @@ function ensureGoogleTagManagerLoaded() {
   return new Promise(function (resolve, reject) {
     (function waitForGoogleTagManager() {
       if (++loadTryCount > 9) return reject();
-      if (isGoogleTagManagerLoaded) return resolve();
+      if (window.cfpbGTM) return resolve();
       _init();
       setTimeout(waitForGoogleTagManager, 500);
     })();
@@ -100,18 +106,5 @@ function analyticsSendEvent(payload) {
       }
     });
 }
-
-/**
- * Try to proactively initialize analytics when custom gtmloaded event fires.
- */
-window.addEventListener(
-  'gtmloaded',
-  function () {
-    ensureGoogleTagManagerLoaded().catch(() => {
-      loadTryCount = 0;
-    });
-  },
-  { once: true },
-);
 
 export { analyticsSendEvent, analyticsLog };
