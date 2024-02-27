@@ -23,7 +23,7 @@
     "cfpb"
   ],
   "dependencies": {
-    "@cfpb/cfpb-atomic-component": "^0.35.0"
+    "@cfpb/cfpb-atomic-component": "^0.37.0"
   },
   "type": "module"
 }
