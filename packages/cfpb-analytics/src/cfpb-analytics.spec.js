@@ -5,7 +5,6 @@ describe('cfpb-analytics', () => {
   beforeEach(() => {
     /**
      * Mock for window.dataLayer.push.
-     *
      * @param {*} object - What to push onto the window.dataLayer.
      * @returns {Array} New pushed array items.
      */

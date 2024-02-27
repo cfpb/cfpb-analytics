@@ -1,6 +1,5 @@
 /**
  * Log a message to the console if the `debug-gtm` URL parameter is set.
- *
  * @param {string} msg - Message to load to the console.
  */
 function analyticsLog(...msg) {
@@ -40,7 +39,6 @@ function _isGtmLoaded() {
 
 /**
  * Poll every 0.5 seconds for 10 seconds for if Google Tag Manager has loaded.
- *
  * @returns {Promise} Resolves if Google Tag Manager has loaded.
  *   Rejects if polling has completed.
  */
