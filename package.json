@@ -1,6 +1,5 @@
 {
   "name": "cfpb-analytics",
-  "version": "0.0.1",
   "private": true,
   "description": "Analytics support for consumerfinance.gov sites.",
   "homepage": "https://github.com/cfpb/cfpb-analytics",
