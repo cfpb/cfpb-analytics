@@ -17,10 +17,13 @@ function analyticsLog(...msg) {
 
 let loadTryCount = 0;
 
+/**
+ * @returns {boolean} Whether GTM has been loaded or not.
+ */
 function _isGtmLoaded() {
   window.dataLayer = window.dataLayer || [];
-  let gtmStartedEvent = window.dataLayer.find(
-    (element) => element['gtm.start']
+  const gtmStartedEvent = window.dataLayer.find(
+    (element) => element['gtm.start'],
   );
 
   if (!gtmStartedEvent) {
@@ -44,8 +47,8 @@ function _isGtmLoaded() {
 function ensureGoogleTagManagerLoaded() {
   return new Promise(function (resolve, reject) {
     (function waitForGoogleTagManager() {
-      if (++loadTryCount > 9) return reject();
       if (_isGtmLoaded()) return resolve();
+      if (++loadTryCount > 9) return reject();
       setTimeout(waitForGoogleTagManager, 500);
     })();
   });

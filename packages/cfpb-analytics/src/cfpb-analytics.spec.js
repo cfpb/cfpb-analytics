@@ -41,7 +41,7 @@ describe('cfpb-analytics', () => {
 
       window.dataLayer.push({
         'gtm.start': true,
-        'gtm.uniqueEventId': true
+        'gtm.uniqueEventId': true,
       });
       await analyticsSendEvent(payload);
       expect(window.dataLayer.length).toEqual(2);
@@ -68,7 +68,7 @@ describe('cfpb-analytics', () => {
       const callbackSpy = jest.spyOn(payload, 'eventCallback');
       window.dataLayer.push({
         'gtm.start': true,
-        'gtm.uniqueEventId': true
+        'gtm.uniqueEventId': true,
       });
       await analyticsSendEvent(payload);
       expect(callbackSpy).toHaveBeenCalledTimes(1);
@@ -94,15 +94,15 @@ describe('cfpb-analytics', () => {
       };
       const callbackSpy = jest.spyOn(payload, 'eventCallback');
       delete window['dataLayer'];
-      analyticsSendEvent(payload).then( async () =>{
+      analyticsSendEvent(payload).then(async () => {
         window['dataLayer'] = [];
         window.dataLayer.push({
           'gtm.start': true,
-          'gtm.uniqueEventId': true
+          'gtm.uniqueEventId': true,
         });
         await analyticsSendEvent(payload);
         expect(callbackSpy).toHaveBeenCalledTimes(1);
-      } );
+      });
     });
   });
 });
