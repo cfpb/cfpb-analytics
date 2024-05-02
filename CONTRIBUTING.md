@@ -1,3 +1,9 @@
+## Update browser stats
+
+New browsers stats (`packages/browserslist-config`) can be created via a CSV exported GA4
+Instructions for doing this export can be found at
+https://github.com/browserslist/browserslist-ga-export?tab=readme-ov-file#google-analytics-4
+
 ## Release management
 
 Ready to publish changes to npm?
