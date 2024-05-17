@@ -6,6 +6,10 @@ This contains the following scoped packages in the `packages` directory:
 
 - `@cfpb/cfpb-analytics` - contains a data layer utility for interacting with Google Analytics.
 
+## Contributing
+
+See [Contributing doc](CONTRIBUTING.md).
+
 ## License
 
 The project is in the public domain within the United States, and

@@ -1,8 +1,34 @@
 ## Update browser stats
 
-New browsers stats (`packages/browserslist-config`) can be created via a CSV exported GA4
+New browsers stats (`packages/browserslist-config`) can be created via a CSV
+that is exported from Google Analytics 4.
 Instructions for doing this export can be found at
 https://github.com/browserslist/browserslist-ga-export?tab=readme-ov-file#google-analytics-4
+
+### Process
+
+We aim to update `browserslist-stats.json` every 6 months in January and July.
+
+If you are tasked with this update, the process will be:
+
+1. Follow the [browserslist-ga-export instructions](https://github.com/browserslist/browserslist-ga-export?tab=readme-ov-file#google-analytics-4)
+2. If you have a CSV of browser metrics,
+   use the command `npx browserslist-ga-export --reportPath metrics.csv`
+   (step 4 from the link above), to generate the `.json` file.
+3. PR the new `browserslist-stats.json` file in this repo under the
+   [packages/browserslist-config](https://github.com/cfpb/cfpb-analytics/tree/main/packages/browserslist-config) package.
+4. Run the release management instructions below to make a new release.
+5. Open a new PR in a repo that uses this package
+   (such as [consumerfinance.gov](https://github.com/cfpb/consumerfinance.gov)
+   and the [design-system](https://github.com/cfpb/design-system))
+   and bump `@cfpb/browserslist-config`.
+6. Update any relevant docs, such as the list on
+   https://github.com/cfpb/consumerfinance.gov/blob/main/docs/browser-support.md.
+   You may need to manually temporarily adjust the cutoff in the project's
+   [browserslist string](https://github.com/cfpb/consumerfinance.gov/blob/74411e65ac84c64b2319cd44e0e69c0d3c2111dc/package.json#L18)
+   (for example, to 1%) and run `npx browserslist` in the project to get an
+   updated list of supported browsers.
+   **Don't accidentally commit the changed cutoff!**
 
 ## Release management
 
