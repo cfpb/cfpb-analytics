@@ -12,17 +12,19 @@ We aim to update `browserslist-stats.json` every 6 months in January and July.
 If you are tasked with this update, the process will be:
 
 1. Follow the [browserslist-ga-export instructions](https://github.com/browserslist/browserslist-ga-export?tab=readme-ov-file#google-analytics-4)
-2. If you have a CSV of browser metrics,
-   use the command `npx browserslist-ga-export --reportPath metrics.csv`
-   (step 4 from the link above), to generate the `.json` file.
-3. PR the new `browserslist-stats.json` file in this repo under the
-   [packages/browserslist-config](https://github.com/cfpb/cfpb-analytics/tree/main/packages/browserslist-config) package.
-4. Run the release management instructions below to make a new release.
-5. Open a new PR in a repo that uses this package
+2. Open the browser metrics CSV file (step 4 from the link above) and delete the "grand total" row if it is present. That row increases the column count and messes up the script.
+3. Place the metrics file (`metrics.csv` or whatever) in the `cfpb-analytics` repository.
+4. In Terminal, `cd` into the `cfpb-analytics` repository and use the command `npx browserslist-ga-export --reportPath metrics.csv`, to generate the `.json` file.
+5. Remove the `metrics.csv` file (we don't want to commit the CSV) and move `browserslist-stats.json` to `cfpb-analytics/packages/browserslist-config/browserslist-stats.json` and replace the JSON file that is there already.
+6. Edit the `version` field in `cfpb-analytics/packages/browserslist-config/package.json` and increment the version one digit.
+7. Create a new git branch in `cfpb-analytics` and run `git status` to see that only the `browserslist-config/browserslist-stats.json` and `browserslist-config/package.json` are changed. Commit these two files and push up to GitHub.
+8. Create a Pull Request (PR) on GitHub and open it for review. If all looks good, it can be merged.
+9. Run the [release management](#release-management) instructions below to make a new release.
+10. Open a new PR in repos that use this package
    (such as [consumerfinance.gov](https://github.com/cfpb/consumerfinance.gov)
    and the [design-system](https://github.com/cfpb/design-system))
-   and bump `@cfpb/browserslist-config`.
-6. Update any relevant docs, such as the list on
+   and bump `@cfpb/browserslist-config`. The commmand `yarn upgrade-interactive --latest` can often be used.
+11. Update any relevant docs, such as the list on
    https://github.com/cfpb/consumerfinance.gov/blob/main/docs/browser-support.md.
    You may need to manually temporarily adjust the cutoff in the project's
    [browserslist string](https://github.com/cfpb/consumerfinance.gov/blob/74411e65ac84c64b2319cd44e0e69c0d3c2111dc/package.json#L18)
@@ -36,7 +38,7 @@ Ready to publish changes to npm?
 
 1. Run `npm whoami` to see that you're logged into npm (run `npm login` if needed).
 2. `cd` into the package you want to publish inside `/packages/`.
-3. Increment the version number in the package's `package.json`.
+3. If it hasn't already been incremented, increment the version number in the package's `package.json`.
 4. Run `npm publish`.
 
 # Guidance on how to contribute
