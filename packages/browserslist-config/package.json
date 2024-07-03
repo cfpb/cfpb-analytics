@@ -1,6 +1,6 @@
 {
   "name": "@cfpb/browserslist-config",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Browserslist data for consumerfinance.gov.",
   "homepage": "https://github.com/cfpb/cfpb-analytics",
   "bugs": "https://github.com/cfpb/cfpb-analytics/issues",
