@@ -21,16 +21,16 @@ If you are tasked with this update, the process will be:
 8. Create a Pull Request (PR) on GitHub and open it for review. If all looks good, it can be merged.
 9. Run the [release management](#release-management) instructions below to make a new release.
 10. Open a new PR in repos that use this package
-   (such as [consumerfinance.gov](https://github.com/cfpb/consumerfinance.gov)
-   and the [design-system](https://github.com/cfpb/design-system))
-   and bump `@cfpb/browserslist-config`. The commmand `yarn upgrade-interactive --latest` can often be used.
+    (such as [consumerfinance.gov](https://github.com/cfpb/consumerfinance.gov)
+    and the [design-system](https://github.com/cfpb/design-system))
+    and bump `@cfpb/browserslist-config`. The commmand `yarn upgrade-interactive --latest` can often be used.
 11. Update any relevant docs, such as the list on
-   https://github.com/cfpb/consumerfinance.gov/blob/main/docs/browser-support.md.
-   You may need to manually temporarily adjust the cutoff in the project's
-   [browserslist string](https://github.com/cfpb/consumerfinance.gov/blob/74411e65ac84c64b2319cd44e0e69c0d3c2111dc/package.json#L18)
-   (for example, to 1%) and run `npx browserslist` in the project to get an
-   updated list of supported browsers.
-   **Don't accidentally commit the changed cutoff!**
+    https://github.com/cfpb/consumerfinance.gov/blob/main/docs/browser-support.md.
+    You may need to manually temporarily adjust the cutoff in the project's
+    [browserslist string](https://github.com/cfpb/consumerfinance.gov/blob/74411e65ac84c64b2319cd44e0e69c0d3c2111dc/package.json#L18)
+    (for example, to 1%) and run `npx browserslist` in the project to get an
+    updated list of supported browsers.
+    **Don't accidentally commit the changed cutoff!**
 
 ## Release management
 

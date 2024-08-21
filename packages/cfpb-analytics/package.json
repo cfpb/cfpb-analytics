@@ -22,8 +22,5 @@
     "analytics",
     "cfpb"
   ],
-  "dependencies": {
-    "@cfpb/cfpb-atomic-component": "^1.0.0"
-  },
   "type": "module"
 }
