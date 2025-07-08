@@ -86,7 +86,7 @@ function analyticsSendEvent(payload) {
         payload.eventCallback &&
         typeof payload.eventCallback === 'function'
       ) {
-        // eslint-disable-next-line callback-return
+         
         payload.eventCallback();
       }
     });
