@@ -11,7 +11,7 @@ We aim to update `browserslist-stats.json` every 6 months in January and July.
 
 If you are tasked with this update, the process will be:
 
-1. Follow the [browserslist-ga-export instructions](https://github.com/browserslist/browserslist-ga-export?tab=readme-ov-file#google-analytics-4)
+1. Follow the [browserslist-ga-export instructions](https://github.com/browserslist/browserslist-ga-export?tab=readme-ov-file#google-analytics-4). You can duplicate [this "Browserlist stats" Google Analytics 4 exploration](https://analytics.google.com/analytics/web/#/analysis/a54439736p254732368/edit/JubNiuR_T_WfoqOijlGmbw) to get started, then change the date range to either January 1–June 30 or July 1–December 31 of the right year.
 2. Open the browser metrics CSV file (step 4 from the link above) and delete the "grand total" row if it is present. That row increases the column count and messes up the script.
 3. Place the metrics file (`metrics.csv` or whatever) in the `cfpb-analytics` repository.
 4. In Terminal, `cd` into the `cfpb-analytics` repository and use the command `npx browserslist-ga-export --reportPath metrics.csv`, to generate the `.json` file.
